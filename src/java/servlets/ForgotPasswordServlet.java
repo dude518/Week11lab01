@@ -34,6 +34,7 @@ public class ForgotPasswordServlet extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String action = request.getParameter("action");
+        String message = null;
         if(action != null && !action.equals(""))
         {
             if(action.equals("email"))
@@ -45,15 +46,17 @@ public class ForgotPasswordServlet extends HttpServlet {
                     try
                     {
                         as.forgotPassword(email, path);
+                        message = "An email has been sent.";
                     }
                     catch(Exception e)
                     {
-                        
+                        message = "Something went wrong.";
                     }
                     
                 }
             }
         }
+        request.setAttribute("message", message);
         
         getServletContext().getRequestDispatcher("/WEB-INF/ForgotPassword.jsp").forward(request, response);
     }
