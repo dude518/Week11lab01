@@ -63,4 +63,32 @@ public class AccountService {
         return null;
     }
     
+    public boolean forgotPassword(String email, String path)
+    {
+        Boolean result = false;
+        UserDB udb = new UserDB();
+        try
+        {
+            User user = udb.getEmail(email);
+            HashMap<String, String> contents = new HashMap<>();
+            contents.put("username", user.getUsername());
+            contents.put("password", user.getPassword());
+            contents.put("firstname", user.getFirstname());
+            contents.put("lastname", user.getLastname());
+            try
+            {
+                WebMailService.sendMail(email, "Noteskeepr Forgot Password", (path + "/emailtemplates/ForgotPassword.html"), contents);
+            }
+            catch(Exception e)
+            {
+                Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return result;
+    }
+    
 }

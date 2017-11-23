@@ -62,6 +62,25 @@ public class UserDB {
             em.close();
         }
     }
+    
+    public User getEmail(String email) throws NotesDBException
+    {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        try
+        {
+            User user = em.createNamedQuery("User.findByEmail", User.class).setParameter("email", email).getSingleResult();
+            return user;
+        }
+        catch(Exception e)
+        {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, "Cannot read user", e);
+            throw new NotesDBException("Error getting User");
+        }
+        finally
+        {
+            em.close();
+        }
+    }
 
     /**
      * Get a single user by their username.
